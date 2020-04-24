@@ -1,0 +1,92 @@
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+Loading required package: stringr
+
+Attaching package: 'filesstrings'
+
+The following object is masked from 'package:dplyr':
+
+    all_equal
+
+
+Attaching package: 'data.table'
+
+The following objects are masked from 'package:dplyr':
+
+    between, first, last
+
+Loading required package: rjson
+Loading required package: RCurl
+Loading required package: bitops
+
+Attaching package: 'plotly'
+
+The following object is masked from 'package:ggplot2':
+
+    last_plot
+
+The following object is masked from 'package:stats':
+
+    filter
+
+The following object is masked from 'package:graphics':
+
+    layout
+
+Loading required package: DBI
+Loading required package: viridisLite
+
+Attaching package: 'tidyr'
+
+The following object is masked from 'package:RCurl':
+
+    complete
+
+
+Attaching package: 'lubridate'
+
+The following objects are masked from 'package:data.table':
+
+    hour, isoweek, mday, minute, month, quarter, second, wday, week,
+    yday, year
+
+The following object is masked from 'package:base':
+
+    date
+
+Fast CO2 Pursley Emails
+0 files moved. 0 failed.
+[1] "NO FILES IN FOLDER, CHECK WITH MIKE'S EMAILS"
+Time difference of 0.0782249 secs
+
+
+
+Fst Span Gas Concentrations
+0 files moved. 0 failed.
+[1] "NO FILES IN FOLDER, CHECK WITH MIKE'S EMAILS"
+Time difference of 0.03244996 secs
+
+
+
+Fst Tip Bucket Tips
+NULL
+[1] 0
+0 files moved. 0 failed.
+[1] "NO FILES IN FOLDER, CHECK WITH MIKE'S EMAILS"
+
+
+
+Fst Wet Dep Lid Status
+Error in setnames(x, value) : 
+  Can't assign 4 names to a 0 column data.table
+Calls: source ... eval -> eval -> names<- -> names<-.data.table -> setnames
+Execution halted
