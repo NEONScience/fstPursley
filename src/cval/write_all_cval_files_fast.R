@@ -22,7 +22,8 @@ if(length(file_names) > 0){
   # Move all files after Fasting them
   file_move <- list.files(path = "C:/GitHub/fstPursley/data/cval/csvCvals/", pattern = "Time",
                            full.names = TRUE)
-  filesstrings::file.move(files = file_move, destinations = "C:/GitHub/fstPursley/data/cval/csvCvals/csvArchive/")
+  filesstrings::file.move(files = file_move, destinations = "C:/GitHub/fstPursley/data/cval/csvCvals/csvArchive/",
+                          overwrite = TRUE)
 } else {
   message("Length of files in C:/GitHub/fstPursley/data/cval/csvCvals/ is = 0")
 }

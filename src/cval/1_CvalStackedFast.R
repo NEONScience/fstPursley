@@ -1,26 +1,20 @@
+# Fst Dir
+CvalFstDir <- "C:/GitHub/fstPursley/data/cval/fstCvalSite/"
+
+# Deve
+siteID <- "HARV"
+cvalType <- "Li7200LastValidationTime"
+timestampCutoff = 120
 # Function for reading in all CVAL Files
 CvalFstOrginMaker <- function(siteID, cvalType,timestampCutoff){
   
   # List all Cval files in the CSV Directory
-  ListOfCvalFiles <- base::list.files(path = CvalCsvDir, pattern = base::paste0(siteID,"_",cvalType),full.names = TRUE)
+  ListOfCvalFiles <- base::list.files(path = CvalFstDir, pattern = base::paste0(siteID,"_",cvalType),full.names = TRUE)
   message(paste0("Starting ", siteID," ",cvalType," with ",base::length(ListOfCvalFiles)," files." ))
   # base::message(base::paste0(base::length(ListOfCvalFiles)," ",cvalType))
   # Check for more than 1 file
-  if(base::length(ListOfCvalFiles) > 1){
-    CvalFiles <- base::lapply(base::paste0(ListOfCvalFiles), data.table::fread) 
-    CvalFile = data.table::rbindlist(CvalFiles) %>%
-      dplyr::distinct(`V3`, .keep_all = TRUE) %>%
-      tidytable::dt_mutate(V3 = lubridate::ymd_hms(V3))%>%
-      dplyr::group_by(V3 = cut(V3, breaks="20 secs")) %>%
-      dplyr::summarize(
-        V1 = siteID,
-        V2 = cvalType,
-        V4 = mean(V4, na.rm = TRUE),
-        V5 = mean(V5, na.rm = TRUE),
-        V6 = mean(V6, na.rm = TRUE),
-        V7 = mean(V7, na.rm = TRUE)
-      ) %>% 
-      dplyr::select(V1,V2,V3,V4,V5,V6,V7)
+  if(base::length(ListOfCvalFiles) > 0){
+    CvalFile <- fst::read.fst(base::paste0(ListOfCvalFiles)) 
     
     names(CvalFile) <- c("SiteID","CvalType","TimeStamp","Co2","H2o","Temp","Pressure")
     
@@ -74,7 +68,7 @@ CvalFstOrginMaker <- function(siteID, cvalType,timestampCutoff){
     
     
     fst::write.fst(x = CvalPhaseShifted,
-                   path = base::paste0(CvalFstDir,siteID, "/",siteID,"_",cvalType,"CvalPhaseShifted.fst"),
+                   path = base::paste0(CvalFstDir,"/",siteID,"_",cvalType,"CvalPhaseShifted.fst"),
                    compress = 100)
   }
   # endTime <- base::Sys.time()
@@ -102,12 +96,12 @@ siteList <- list("BART","HARV","BLAN","SCBI","SERC",
                  "SRER","WREF","ABBY","TEAK","SOAP",
                  "SJER","BONA","HEAL","DEJU","BARR",
                  "TOOL","PUUM")
-for(siteID in siteList[2:47]){
+for(siteID in siteList[1:47]){
   startTime <- base::Sys.time()
   
-  CvalFstOrginMaker(siteID = siteID ,cvalType = "Li840LastValidationTime", timestampCutoff = 120)
+  # CvalFstOrginMaker(siteID = siteID ,cvalType = "Li840LastValidationTime", timestampCutoff = 120)
   # CvalFstOrginMaker(siteID = siteID ,cvalType = "Li840LastCalibrationTime")
-  # CvalFstOrginMaker(siteID = siteID ,cvalType = "Li7200LastValidationTime")
+  CvalFstOrginMaker(siteID = siteID ,cvalType = "Li7200LastValidationTime", timestampCutoff = 0)
   # CvalFstOrginMaker(siteID = siteID ,cvalType = "G2131iLastValidationTime")
   
   endTime <- base::Sys.time()
@@ -117,7 +111,7 @@ for(siteID in siteList[2:47]){
                              " Seconds"))
 }
 
-phaseFile <- read.fst("C:/1_Data/fstCVALPipeline/AllCvalFst/BART/BART_Li840LastValidationTimeCvalPhaseShifted.fst")
+phaseFile <- read.fst("C:/GitHub/fstPursley/data/cval/fstCvalSite/ABBY_Li840LastValidationTimeCvalPhaseShifted.fst")
 glimpse(phaseFile)
 library(zoo)
 phaseFile$Month2 <- as.yearmon(phaseFile$Month2, "%B-%y")
