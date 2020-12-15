@@ -1,7 +1,10 @@
 # fstMaster <- fst::read.fst(path = "C:/GitHub/fieldscience_collab/TIS/IS3Rmarkdown/1_fstPursley/data/spanGasConc.fst")
 # fstMaster$assetTag <- as.character(fstMaster$assetTag)
-
-
+library(aws.s3)
+Sys.setenv("AWS_ACCESS_KEY_ID"     = "research-eddy-inquiry",
+           "AWS_SECRET_ACCESS_KEY" = "V3zP8JI30/lFpNfCB6B6FwunrMAYgOC+rYlJCaap",
+           "AWS_S3_ENDPOINT"       = "neonscience.org",
+           "AWS_DEFAULT_REGION"    = "s3.data")
 TotalTime <- Sys.time()
 # Update Cylinder Assay Tables
 
@@ -31,7 +34,7 @@ if(length(fileList) == 0){
   files$assetTag <- as.character(files$assetTag)
   # Remove any blank records.
   files <- files %>%
-    tidytable::dt_filter(conc != "") %>%
+    dplyr::filter(conc != "") %>%
     dplyr::distinct(date,siteID,name,conc,assetTag)
   fstRowIngest <- nrow(files)
   message("New Span Gas File Row = ", fstRowIngest)
@@ -45,13 +48,19 @@ if(length(fileList) == 0){
   fstList <- list(fstMaster, files)
   newFstMaster <- rbindlist(fstList)
   newFstMaster <- newFstMaster %>%
-    tidytable::dt_filter(conc != "") %>%
+    dplyr::filter(conc != "") %>%
     dplyr::distinct(date,siteID,name,conc,assetTag)
   
   fstRowNewMaster <- nrow(newFstMaster)
   message("New Master Span Gas File Row = ", fstRowNewMaster)
     
   fst::write.fst(newFstMaster, paste0(repoDir, "data/spanGasConc.fst"))
+  
+  aws.s3::put_object(
+    file = paste0(repoDir, "data/spanGasConc.fst"),
+    object = "lookup/spanGasConc.fst",
+    bucket = "research-eddy-inquiry"
+  )
 }
 
 
